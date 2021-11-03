@@ -7,15 +7,20 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController,UITextFieldDelegate,WeatherModelDelegate {
+class WeatherViewController: UIViewController,UITextFieldDelegate,WeatherModelDelegate,UITableViewDataSource {
     
     
     
     
+    
+    
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var conditionImageView: UIImageView!
+    
+    var forecast:[WeatherModel] = []
     var weatherManager = WeatherManager()
     
     
@@ -23,6 +28,7 @@ class WeatherViewController: UIViewController,UITextFieldDelegate,WeatherModelDe
         super.viewDidLoad()
         searchTextField.delegate = self
         weatherManager.delegate = self
+        tableView.dataSource = self
         weatherManager.fetchWeather(city: "Belgrade")
     }
 
@@ -59,6 +65,24 @@ class WeatherViewController: UIViewController,UITextFieldDelegate,WeatherModelDe
     }
     func didFailWithError(error: Error) {
         print(error)
+    }
+    func didUpdateForecast(forecast: [WeatherModel]) {
+        self.forecast = forecast
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return forecast.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
+        
+        cell?.textLabel?.text = forecast[indexPath.row].date
+        cell?.detailTextLabel?.text = forecast[indexPath.row].temperatureString + "°C"
+        
+        return cell!
     }
 }
 

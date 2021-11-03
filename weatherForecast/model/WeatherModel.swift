@@ -11,6 +11,26 @@ struct WeatherModel{
     let conditionId: Int
     let cityName:String
     let temperature:Double
+    let dateTxt:String
+    
+    var date:String{
+        if dateTxt=="" {
+            return ""
+        }else{
+            let dateFormatterOld = DateFormatter()
+            dateFormatterOld.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+            let dateFormatterNew = DateFormatter()
+            dateFormatterNew.dateFormat = "MMM dd"
+
+            if let date = dateFormatterOld.date(from: dateTxt) {
+                return dateFormatterNew.string(from: date)
+            } else {
+               return ""
+            }
+        }
+    }
+    
     var temperatureString: String {
             return String(format: "%.1f", temperature)
         }
