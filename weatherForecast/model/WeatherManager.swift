@@ -19,7 +19,7 @@ struct WeatherManager{
     let baseUrlForecast = "https://api.openweathermap.org/data/2.5/forecast?units=metric&"
     
     //this is my token, you can use your own
-    static var token = "b97e74f1fb80ce02aeec74f5f0614f04"
+    static var token = ""
     
     var delegate:WeatherModelDelegate?
     
